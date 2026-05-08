@@ -78,7 +78,7 @@
     {
       "index": "01",
       "name": "Rave for Good im Kater!",
-      "flyer": "/flyer-kater.png",
+      "flyer": "/flyer-kater.jpg",
       "flyerAlt": "Rave for Good im Kater! — 28–29 June, Kater Blau",
       "metaLines": [
         "28–29 June · Kater Blau, Berlin",
@@ -90,7 +90,7 @@
     {
       "index": "02",
       "name": "One More Time",
-      "flyer": "/flyer-meier.png",
+      "flyer": "/flyer-meier.jpg",
       "flyerAlt": "One More Time — 11 November, Meier Music Club",
       "metaLines": [
         "11 November · Meier Music Club, Berlin",
