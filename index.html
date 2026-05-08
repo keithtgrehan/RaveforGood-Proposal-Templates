@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="page-title">Rave for Good e.V. — Proposal</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+
+    <!-- ── Export bar ────────────────────────────────────────────────────── -->
+    <div class="export-bar">
+      <span id="export-bar-label"></span>
+      <button class="export-btn" onclick="window.print()">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+          <path d="M3 6V3h10v3M3 11H1V7h14v4h-2M3 11v2h10v-2" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+        </svg>
+        <span id="export-btn-label"></span>
+      </button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         PAGE 1 — PROPOSAL
+    ══════════════════════════════════════════════════════════════════════ -->
+    <div class="page page-1">
+
+      <!-- Masthead -->
+      <header class="masthead">
+        <div class="masthead-left">
+          <img src="/logo.png" alt="Rave for Good" class="logo" />
+          <span class="masthead-org" id="masthead-org"></span>
+        </div>
+        <div class="masthead-meta" id="masthead-meta"></div>
+      </header>
+
+      <span class="rule rule--full masthead-rule"></span>
+
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-left">
+          <span class="hero-label" id="hero-label"></span>
+          <h1 class="hero-title" id="hero-title"></h1>
+          <p class="hero-tagline" id="hero-tagline"></p>
+        </div>
+        <div class="hero-right">
+          <div class="hero-address-label" id="hero-address-label"></div>
+          <div class="hero-address" id="hero-address"></div>
+          <div class="hero-address-sub" id="hero-address-sub"></div>
+        </div>
+      </div>
+
+      <span class="rule hero-rule"></span>
+
+      <!-- Body: 2×2 grid -->
+      <div class="body-grid" id="body-grid"></div>
+
+      <!-- Footer -->
+      <span class="rule footer-rule"></span>
+      <div class="page-footer">
+        <span class="page-number" id="p1-page-num"></span>
+        <span class="footer-identity" id="p1-identity"></span>
+        <span class="footer-url" id="footer-url-1"></span>
+      </div>
+
+    </div><!-- /page-1 -->
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         PAGE 2 — TRACK RECORD + SETUP + AWARENESS + QUESTIONS
+    ══════════════════════════════════════════════════════════════════════ -->
+    <div class="page page-2">
+
+      <!-- Header -->
+      <div class="page2-header">
+        <div class="page2-title-row">
+          <div>
+            <div class="page2-title" id="track-title"></div>
+            <div class="page2-subtitle" id="track-subtitle"></div>
+          </div>
+        </div>
+        <span class="rule rule--full"></span>
+      </div>
+
+      <!-- Track grid: flyers left, event details right -->
+      <div class="track-grid">
+        <div class="flyers-col" id="flyers-col"></div>
+
+        <div class="info-col">
+          <div id="events-list"></div>
+
+          <div class="bisherige-block">
+            <div class="bisherige-label" id="stats-label"></div>
+            <div class="bisherige-stats" id="stats-grid"></div>
+            <p class="bisherige-note" id="stats-note"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <span class="rule lower-divider"></span>
+
+      <!-- Lower 3-col -->
+      <div class="lower-grid" id="lower-grid"></div>
+
+      <!-- Contact -->
+      <div class="contact-block">
+        <div class="contact-label" id="contact-label"></div>
+        <div class="contact-grid" id="contact-grid"></div>
+      </div>
+
+      <!-- Footer -->
+      <span class="rule footer-rule"></span>
+      <div class="page-footer">
+        <span class="page-number" id="p2-page-num"></span>
+        <span class="footer-identity" id="p2-identity"></span>
+        <span class="footer-url" id="footer-url-2"></span>
+      </div>
+
+    </div><!-- /page-2 -->
+
+    <script type="module">
+      (async () => {
+        const base = import.meta.env?.BASE_URL ?? '/';
+        const res  = await fetch(base.replace(/\/$/, '') + '/proposal-data.json');
+        const d    = await res.json();
+
+        // ── helpers ────────────────────────────────────────────────────
+        const el  = id => document.getElementById(id);
+        const set = (id, html) => { const e = el(id); if (e) e.innerHTML = html; };
+        const txt = (id, str) => { const e = el(id); if (e) e.textContent = str; };
+
+        // ── meta ───────────────────────────────────────────────────────
+        document.title = d.meta.pageTitle;
+        txt('export-bar-label', d.meta.exportBarLabel);
+        txt('export-btn-label', d.meta.exportBtnLabel);
+
+        // ── masthead ───────────────────────────────────────────────────
+        txt('masthead-org', d.masthead.org);
+        set('masthead-meta', `${d.masthead.dateLine}<br/>${d.masthead.docType}`);
+
+        // ── hero ───────────────────────────────────────────────────────
+        txt('hero-label', d.hero.label);
+        el('hero-title').innerHTML =
+          d.hero.titleMain.join('<br/>') +
+          `\n<em>× ${d.hero.titleVenue.join('<br/>')}</em>`;
+        set('hero-tagline', `${d.hero.tagline}<br/>${d.hero.taglineSub}`);
+        txt('hero-address-label', d.hero.addressLabel);
+        set('hero-address', `${d.hero.addressName}<br/>${d.hero.addressCity}`);
+        txt('hero-address-sub', d.hero.addressStreet);
+
+        // ── body sections ──────────────────────────────────────────────
+        const grid = el('body-grid');
+        d.sections.forEach(s => {
+          const sec = document.createElement('div');
+          sec.className = 'body-section';
+
+          if (s.formatList) {
+            // Format section
+            const listItems = s.formatList.map(i => `<li>${i}</li>`).join('');
+            const list2Items = s.formatList2.map(i => `<li>${i}</li>`).join('');
+            sec.innerHTML = `
+              <div class="section-label">${s.label}</div>
+              <div class="section-heading">${s.heading}</div>
+              <ul class="format-list">${listItems}</ul>
+              <p class="section-body"><span class="format-subhead">${s.formatSubhead}</span></p>
+              <ul class="format-list">${list2Items}</ul>
+            `;
+          } else if (s.bodyLines) {
+            // Multi-paragraph section (no bold prefix)
+            const paras = s.bodyLines.map(l => `<p class="section-body">${l}</p>`).join('');
+            sec.innerHTML = `
+              <div class="section-label">${s.label}</div>
+              <div class="section-heading">${s.heading}</div>
+              ${paras}
+            `;
+          } else {
+            // Standard section with optional bold suffix
+            const suffix = s.bodySuffixHighlight
+              ? s.bodySuffix.replace(s.bodySuffixHighlight, `<strong>${s.bodySuffixHighlight}</strong>`)
+              : (s.bodySuffix ? `<strong>${s.bodySuffix}</strong>` : '');
+            sec.innerHTML = `
+              <div class="section-label">${s.label}</div>
+              <div class="section-heading">${s.heading}</div>
+              <p class="section-body">
+                ${s.body}
+                ${suffix ? `<br/><br/>${suffix}` : ''}
+              </p>
+            `;
+          }
+          grid.appendChild(sec);
+        });
+
+        // ── page 1 footer ──────────────────────────────────────────────
+        txt('p1-page-num',  d.page1Footer.pageNum);
+        txt('p1-identity',  d.page1Footer.identity);
+        txt('footer-url-1', d.meta.footerUrl);
+
+        // ── track record ───────────────────────────────────────────────
+        txt('track-title',    d.trackRecord.title);
+        txt('track-subtitle', d.trackRecord.subtitle);
+
+        // ── flyers ─────────────────────────────────────────────────────
+        el('flyers-col').innerHTML = d.events.map(ev =>
+          `<div class="flyer-wrap">
+             <img src="${ev.flyer}" alt="${ev.flyerAlt}" class="flyer-img"/>
+           </div>`
+        ).join('');
+
+        // ── events ─────────────────────────────────────────────────────
+        const evList = el('events-list');
+        d.events.forEach(ev => {
+          const entry = document.createElement('div');
+          entry.className = 'event-entry';
+          entry.innerHTML = `
+            <span class="event-index">${ev.index}</span>
+            <div class="event-details">
+              <div class="event-name">${ev.name}</div>
+              <div class="event-meta">${ev.metaLines.join('<br/>')}</div>
+            </div>
+          `;
+          evList.appendChild(entry);
+        });
+
+        // ── stats ──────────────────────────────────────────────────────
+        txt('stats-label', d.stats.label);
+        el('stats-grid').innerHTML = d.stats.items.map(i =>
+          `<div class="stat-item">
+             <div class="stat-num">${i.num}</div>
+             <div class="stat-label">${i.label}</div>
+           </div>`
+        ).join('');
+        txt('stats-note', d.stats.note);
+
+        // ── lower grid ─────────────────────────────────────────────────
+        const lowerGrid = el('lower-grid');
+        d.lowerSections.forEach((ls, idx) => {
+          const sec = document.createElement('div');
+          sec.className = 'lower-section' + (idx === 2 ? ' lower-section--cta' : '');
+
+          let inner = `<div class="lower-label">${ls.label}</div>`;
+
+          if (ls.paragraphs) {
+            ls.paragraphs.forEach(p => {
+              const subhead = p.subhead ? `<span class="lower-subhead">${p.subhead}</span> ` : '';
+              const text = p.text.replace(/\n/g, '<br/>');
+              inner += `<p class="lower-body">${subhead}${text}</p>`;
+            });
+          } else if (ls.items) {
+            const currentList = [];
+            const flush = () => {
+              if (currentList.length) {
+                inner += `<ul class="lower-list">${currentList.map(t => `<li>${t}</li>`).join('')}</ul>`;
+                currentList.length = 0;
+              }
+            };
+            ls.items.forEach(item => {
+              if (item.type === 'subhead') {
+                flush();
+                inner += `<p class="lower-body"><span class="lower-subhead">${item.text}</span></p>`;
+              } else {
+                currentList.push(item.text);
+              }
+            });
+            flush();
+          }
+
+          sec.innerHTML = inner;
+          lowerGrid.appendChild(sec);
+        });
+
+        // ── contact ────────────────────────────────────────────────────
+        txt('contact-label', d.contact.label);
+        el('contact-grid').innerHTML = d.contact.items.map(item => {
+          if (item.href) {
+            return `<div class="contact-item"><a href="${item.href}" target="_blank">${item.text}</a></div>`;
+          }
+          return `<div class="contact-item">${item.text}</div>`;
+        }).join('');
+
+        // ── page 2 footer ──────────────────────────────────────────────
+        txt('p2-page-num',  d.page2Footer.pageNum);
+        txt('p2-identity',  d.page2Footer.identity);
+        txt('footer-url-2', d.meta.footerUrl);
+      })();
+    </script>
+
+  </body>
+</html>
