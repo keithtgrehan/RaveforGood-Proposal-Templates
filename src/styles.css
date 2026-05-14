@@ -626,7 +626,15 @@ body {
   .body-grid   { grid-template-columns: 1fr; gap: 20px; }
   .track-grid  { grid-template-columns: 1fr; gap: 20px; }
   .flyers-col  { flex-direction: row; }
-  .flyer-img   { height: 130px; }
+  .flyer-img {
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  object-fit: contain;
+  object-position: center top;
+  display: block;
+  filter: saturate(0.85) contrast(1.08);
+}
   .lower-grid  { grid-template-columns: 1fr; gap: 20px; }
   .lower-section--cta { border-left: none; padding-left: 0; }
   .contact-grid { grid-template-columns: 1fr 1fr; }

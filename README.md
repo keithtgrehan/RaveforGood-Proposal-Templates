@@ -42,8 +42,8 @@ Examples:
 
 ```text
 public/logo.png
-public/flyer-kater.jpg
-public/flyer-meier.jpg
+public/assets/images/events/rave-for-good-im-kater-highres.jpeg
+public/assets/images/events/one-more-time-meier-highres.jpeg
 public/opengraph.jpg
 ```
 
@@ -51,8 +51,8 @@ Image paths inside `proposal-data.json` usually look like:
 
 ```json
 "/logo.png"
-"/flyer-kater.jpg"
-"/flyer-meier.jpg"
+"/assets/images/events/rave-for-good-im-kater-highres.jpeg"
+"/assets/images/events/one-more-time-meier-highres.jpeg"
 ```
 
 ---
@@ -530,7 +530,7 @@ Check:
 Example:
 
 ```json
-"/flyer-kater.jpg"
+"/assets/images/events/rave-for-good-im-kater-highres.jpeg"
 ```
 
 ---
